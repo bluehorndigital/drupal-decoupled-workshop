@@ -1,0 +1,19 @@
+POST https://drupal-decoupled-workshop.lndo.site/oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=cb14dbd6-1580-4f85-91fe-b06396c848f3&username=demo_user&password=demo_user
+
+> {%
+  client.global.set('token_type', response.body.token_type)
+  client.global.set('access_token', response.body.access_token)
+%}
+###
+
+GET https://drupal-decoupled-workshop.lndo.site/oauth/userinfo
+Authorization: {{token_type}} {{access_token}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}

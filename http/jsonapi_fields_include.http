@@ -1,0 +1,20 @@
+# Example of fetching a recipe with specific fields (5kb, all of the data.)
+GET https://drupal-decoupled-workshop.lndo.site
+  /jsonapi/node/recipe/ca77189a-00c0-47c0-8440-f5ed984d147c
+  ?include=field_tags,field_recipe_category,field_media_image.field_media_image,uid
+  &fields[node--recipe]=title,created,field_cooking_time,field_difficulty,
+    field_ingredients,field_number_of_servings,field_preparation_time,
+    field_recipe_instruction.processed
+  &fields[taxonomy_term--tags]=name,path.alias
+  &fields[taxonomy_term--recipe_category]=name,path.alias
+  &fields[media--image]=field_media_image
+  &fields[file--file]=uri.url
+  &fields[user--user]=display_name
+Accept: application/vnd.api+json
+
+###
+
+# The same example, without field restrictions (20kb all of the data)
+GET https://drupal-decoupled-workshop.lndo.site
+  /jsonapi/node/recipe/ca77189a-00c0-47c0-8440-f5ed984d147c
+  ?include=field_tags,field_recipe_category,field_media_image.field_media_image,uid

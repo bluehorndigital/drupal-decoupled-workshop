@@ -1,0 +1,7 @@
+# The default menu has Home and two views, no entity links.
+workshop_setup.start_recipes:
+  title: Starters
+  route_name: entity.taxonomy_term.canonical
+  route_parameters:
+    taxonomy_term: 33
+  menu_name: main

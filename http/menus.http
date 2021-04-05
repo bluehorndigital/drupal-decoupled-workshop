@@ -1,0 +1,24 @@
+GET https://drupal-decoupled-workshop.lndo.site/jsonapi/menu_items/main
+Accept: application/vnd.api+json
+
+> {%
+  client.global.set('menu_item', response.body.data[1].attributes.url)
+%}
+
+###
+
+GET https://drupal-decoupled-workshop.lndo.site/router/translate-path?path={{ menu_item }}&_format=json
+Accept: application/json
+
+> {%
+// Normally we would just use response.body.jsonapi.individual which has the full
+// URL. But that cannot be done here.
+client.global.set('entity_type', response.body.entity.type)
+client.global.set('entity_bundle', response.body.entity.bundle)
+client.global.set('entity_uuid', response.body.entity.uuid)
+%}
+
+###
+
+GET https://drupal-decoupled-workshop.lndo.site/jsonapi/{{entity_type}}/{{entity_bundle}}/{{entity_uuid}}
+Accept: application/vnd.api+json

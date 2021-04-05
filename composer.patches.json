@@ -1,0 +1,12 @@
+{
+  "drupal/decoupled_router": {
+    "Fix canonical url generation": "https://www.drupal.org/files/issues/2020-02-27/3116487-2.patch"
+  },
+  "drupal/consumer_image_styles": {
+    "Do not require jsonapi_extras": "https://git.drupalcode.org/project/consumer_image_styles/-/merge_requests/3.diff",
+    "D9 compat": "https://www.drupal.org/files/issues/2021-01-19/3122456-11.patch"
+  },
+  "drupal/simple_oauth": {
+    "Client secret is now required for non-confidential apps": "https://git.drupalcode.org/project/simple_oauth/-/merge_requests/6.patch"
+  }
+}

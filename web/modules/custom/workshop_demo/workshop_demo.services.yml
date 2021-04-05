@@ -1,0 +1,10 @@
+services:
+  workshop_demo.resource_type_build_subscriber:
+    class: Drupal\workshop_demo\EventSubscriber\ResourceTypeBuildSubscriber
+    tags:
+      - { name: event_subscriber }
+  workshop_demo.views_path_translator:
+    class: Drupal\workshop_demo\EventSubscriber\ViewsPathTranslatorSubscriber
+    arguments: [ '@router.no_access_checks' ]
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,2 @@
+GET https://drupal-decoupled-workshop.lndo.site/en/jsonapi/node/recipe/2dbe8770-a60e-4792-8f80-1af7c1b425d1?include=field_media_image,field_media_image.field_media_image
+Accept: application/vnd.api+json

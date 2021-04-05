@@ -1,0 +1,20 @@
+name: Workshop Demo
+description: Sets up the workshop demo
+type: module
+core_version_requirement: ^9
+dependencies:
+  - admin_toolbar:admin_toolbar
+  - admin_toolbar:admin_toolbar_search
+  - admin_toolbar:admin_toolbar_tools
+  - consumer_image_styles:consumer_image_styles
+  - decoupled_router:decoupled_router
+  - drupal:taxonomy
+  - gin_login:gin_login
+  - gin_toolbar:gin_toolbar
+  - jsonapi_hypermedia:jsonapi_hypermedia
+  - jsonapi_menu_items:jsonapi_menu_items
+  - jsonapi_search_api:jsonapi_search_api
+  - jsonapi_search_api:jsonapi_search_api_facets
+  - jsonapi_user_resources:jsonapi_user_resources
+  - jsonapi_views:jsonapi_views
+  - simple_oauth:simple_oauth

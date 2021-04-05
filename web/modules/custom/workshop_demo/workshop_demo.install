@@ -1,0 +1,88 @@
+<?php declare(strict_types=1);
+
+use Drupal\consumers\Entity\Consumer;
+use Drupal\Core\File\FileSystem;
+use Drupal\simple_oauth\Service\Filesystem\FileSystemChecker;
+use Drupal\simple_oauth\Service\KeyGeneratorService;
+use Drupal\user\Entity\User;
+
+function workshop_demo_install(): void {
+  $config_factory = \Drupal::configFactory();
+
+  _workshop_demo_create_keys();
+  $config_factory->getEditable('simple_oauth.settings')
+    ->set('public_key', '../private/keys/public.key')
+    ->set('private_key', '../private/keys/private.key')
+    ->save();
+
+  $config_factory->getEditable('jsonapi.settings')
+    ->set('read_only', false)
+    ->save();
+
+  // Setup the theme.
+  \Drupal::getContainer()->get('theme_installer')->install(['gin']);
+  $config_factory
+    ->getEditable('system.theme')
+    ->set('admin', 'gin')
+    ->save();
+
+  // Delete default consumer.
+  Consumer::load(1)->delete();
+
+  $pwd_gen = \Drupal::getContainer()->get('password_generator');
+  assert($pwd_gen instanceof \Drupal\Core\Password\PasswordGeneratorInterface);
+  Consumer::create([
+    'uuid' => 'cb14dbd6-1580-4f85-91fe-b06396c848f3',
+    'label' => 'Workshop Consumer',
+    'description' => 'Consumer used in the workshop.',
+    'is_default' => TRUE,
+    'secret' => $pwd_gen->generate(),
+    'confidential' => FALSE,
+    'third_party' => FALSE,
+    'image_styles' => [
+      'large_21_9',
+      'medium_21_9',
+      'small_21_9',
+      'large_3_2_768x512',
+      'medium_3_2_600x400',
+    ],
+  ])->save();
+
+  User::create([
+    'name' => 'demo_user',
+    'mail' => 'demo_user@example.com',
+    'pass' => 'demo_user'
+  ])->save();
+}
+
+function _workshop_demo_create_keys(): void {
+  $dir = 'private://keys';
+  $key_gen = \Drupal::service('simple_oauth.key.generator');
+  assert($key_gen instanceof KeyGeneratorService);
+  $file_system_checker = \Drupal::service('simple_oauth.filesystem_checker');
+  assert($file_system_checker instanceof FileSystemChecker);
+  $file_system = \Drupal::service('file_system');
+  assert($file_system instanceof FileSystem);
+
+  if (!$file_system_checker->isDirectory($dir))  {
+    $file_system->mkdir($dir);
+  }
+
+  $real_dir = $file_system->realpath($dir);
+  $public_key_filename = $real_dir . '/public.key';
+  $private_key_filename = $real_dir . '/private.key';
+  if ($file_system_checker->fileExist($public_key_filename) && $file_system_checker->fileExist($public_key_filename)) {
+    $file_system->chmod($public_key_filename, 0600);
+    $file_system->chmod($private_key_filename, 0600);
+  }
+  else {
+    // 2. Generate the pair in the selected directory.
+    try {
+      $key_gen->generateKeys($real_dir);
+    } catch (\Exception $e) {
+      // Unable to generate files after all.
+      return;
+    }
+  }
+}
+

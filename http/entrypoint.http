@@ -1,0 +1,2 @@
+GET https://drupal-decoupled-workshop.lndo.site/jsonapi
+Accept: application/vnd.api+json

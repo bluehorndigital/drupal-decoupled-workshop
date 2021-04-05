@@ -1,0 +1,22 @@
+GET https://drupal-decoupled-workshop.lndo.site/jsonapi/menu_items/main
+Accept: application/vnd.api+json
+
+> {%
+  client.global.set('menu_item', response.body.data[2].attributes.url)
+%}
+
+###
+
+GET https://drupal-decoupled-workshop.lndo.site/router/translate-path?path={{ menu_item }}&_format=json
+Accept: application/json
+
+> {%
+  // We can't set the entire URL as a variable in a request, so we manually build it.
+  client.global.set('view_id', response.body.views.view_id)
+  client.global.set('display_id', response.body.views.display_id)
+%}
+
+###
+
+GET https://drupal-decoupled-workshop.lndo.site/jsonapi/views/{{view_id}}/{{display_id}}
+Accept: application/vnd.api+json
